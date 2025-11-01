@@ -1109,27 +1109,40 @@
             }
 
             const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const partner = users.find(u => u.partnerCode === partnerCode && u.id !== currentUser.id);
+            
+            // Debug: tampilkan info untuk membantu troubleshooting
+            console.log('Mencari kode:', partnerCode);
+            console.log('Kode saya:', currentUser.partnerCode);
+            console.log('Semua user:', users.map(u => ({ name: u.name, code: u.partnerCode })));
+            
+            const partner = users.find(u => {
+                const userCode = u.partnerCode ? u.partnerCode.trim().toUpperCase() : '';
+                return userCode === partnerCode && u.id !== currentUser.id;
+            });
 
             if (!partner) {
-                showNotification('Kode pasangan tidak valid!', 'error');
+                showNotification('Kode pasangan tidak valid! Pastikan kode diketik dengan benar (tanpa spasi).', 'error');
+                console.log('Partner tidak ditemukan');
                 return;
             }
 
             // Update both users
-            currentUser.partnerId = partner.id;
-            partner.partnerId = currentUser.id;
-
             const userIndex = users.findIndex(u => u.id === currentUser.id);
             const partnerIndex = users.findIndex(u => u.id === partner.id);
             
-            users[userIndex] = currentUser;
-            users[partnerIndex] = partner;
+            users[userIndex].partnerId = partner.id;
+            users[partnerIndex].partnerId = currentUser.id;
+            
+            currentUser.partnerId = partner.id;
 
             localStorage.setItem('users', JSON.stringify(users));
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
             showNotification('Berhasil terhubung dengan ' + partner.name + '! 💕', 'success');
+            
+            // Clear input
+            document.getElementById('partnerCodeInput').value = '';
+            
             showApp();
         }
 
