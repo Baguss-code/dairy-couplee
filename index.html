@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Couple Diary - Our Story Together</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff6b9d;
+            --secondary: #c44569;
+            --accent: #ffa07a;
+            --dark: #2d3436;
+            --light: #fff5f7;
+            --shadow: rgba(255, 107, 157, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffa6c1 0%, #ff6b9d 50%, #e85d8a 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Auth Pages */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            color: var(--primary);
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .auth-header .hearts {
+            font-size: 40px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--shadow);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px var(--shadow);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Main App */
+        .app-container {
+            display: none;
+        }
+
+        .app-container.active {
+            display: block;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .btn-logout {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--dark);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        /* Add Memory Section */
+        .add-memory {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .add-memory h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .file-upload {
+            border: 3px dashed var(--primary);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .file-upload:hover {
+            background: var(--light);
+            border-color: var(--secondary);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .preview-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-item .remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Filter Section */
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filters input, .filters select {
+            padding: 10px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .memory-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            position: relative;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .memory-card::before {
+            content: '♥';
+            position: absolute;
+            left: -45px;
+            top: 25px;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .memory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .memory-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .memory-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--light);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .memory-title {
+            font-size: 24px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .memory-content {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .memory-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .memory-images img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .memory-images img:hover {
+            transform: scale(1.05);
+        }
+
+        .memory-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 20px;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .modal img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            max-width: 350px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); }
+            to { transform: translateX(0); }
+        }
+
+        .notification.success {
+            border-left: 5px solid #27ae60;
+        }
+
+        .notification.error {
+            border-left: 5px solid #e74c3c;
+        }
+
+        .notification.info {
+            border-left: 5px solid #3498db;
+        }
+
+        /* Settings */
+        .settings-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .settings-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .timeline {
+                padding-left: 20px;
+            }
+
+            .memory-card::before {
+                left: -35px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filters input, .filters select {
+                width: 100%;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .partner-request {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .partner-code {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="hearts">💕</div>
+                <h1>Couple Diary</h1>
+                <p>Simpan kenangan indah bersama</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="login2FA">
+                        Aktifkan Autentikasi 2 Faktor
+                    </label>
+                </div>
+                <button type="submit" class="btn">Masuk</button>
+            </form>
+            <div class="auth-footer">
+                Belum punya akun? <a href="#" id="showRegister">Daftar di sini</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="registerPage" class="auth-container hidden">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="hearts">💑</div>
+                <h1>Buat Akun Baru</h1>
+                <p>Mulai perjalanan cinta kalian</p>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="regName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" required minlength="8">
+                </div>
+                <div class="form-group">
+                    <label>Konfirmasi Password</label>
+                    <input type="password" id="regConfirmPassword" required>
+                </div>
+                <button type="submit" class="btn">Daftar</button>
+            </form>
+            <div class="auth-footer">
+                Sudah punya akun? <a href="#" id="showLogin">Masuk di sini</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appContainer" class="app-container">
+        <div class="container">
+            <div class="header">
+                <h1>💕 Couple Diary</h1>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <div>
+                        <div id="userName" style="font-weight: 600;"></div>
+                        <div id="partnerName" style="font-size: 14px; color: #666;"></div>
+                    </div>
+                    <button class="btn-logout" onclick="logout()">Keluar</button>
+                </div>
+            </div>
+
+            <!-- Partner Connection -->
+            <div id="partnerSection" class="partner-request hidden">
+                <h2>Hubungkan dengan Pasangan</h2>
+                <p>Bagikan kode ini kepada pasangan Anda:</p>
+                <div class="partner-code" id="myPartnerCode"></div>
+                <div class="form-group">
+                    <label>Atau masukkan kode pasangan:</label>
+                    <input type="text" id="partnerCodeInput" placeholder="Masukkan kode pasangan">
+                    <button class="btn" onclick="connectPartner()" style="margin-top: 10px;">Hubungkan</button>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('timeline')">Timeline</button>
+                <button class="tab" onclick="showTab('add')">Tambah Kenangan</button>
+                <button class="tab" onclick="showTab('gallery')">Galeri</button>
+                <button class="tab" onclick="showTab('settings')">Pengaturan</button>
+            </div>
+
+            <!-- Add Memory Tab -->
+            <div id="addTab" class="hidden">
+                <div class="add-memory">
+                    <h2>Tambah Kenangan Baru</h2>
+                    <form id="memoryForm">
+                        <div class="form-group">
+                            <label>Judul Kenangan</label>
+                            <input type="text" id="memoryTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Kategori</label>
+                            <select id="memoryCategory" required>
+                                <option value="">Pilih kategori</option>
+                                <option value="date">Kencan</option>
+                                <option value="travel">Traveling</option>
+                                <option value="anniversary">Anniversary</option>
+                                <option value="daily">Keseharian</option>
+                                <option value="special">Momen Spesial</option>
+                                <option value="other">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal</label>
+                            <input type="date" id="memoryDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cerita</label>
+                            <textarea id="memoryStory" rows="6" required></textarea>
+                        </div>
+                        <div class="file-upload" onclick="document.getElementById('memoryImages').click()">
+                            <p>📸 Klik untuk upload foto</p>
+                            <p style="font-size: 14px; color: #666; margin-top: 10px;">Maksimal 10 foto</p>
+                            <input type="file" id="memoryImages" accept="image/*" multiple>
+                        </div>
+                        <div id="previewImages" class="preview-images"></div>
+                        <button type="submit" class="btn">Simpan Kenangan</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Timeline Tab -->
+            <div id="timelineTab">
+                <div class="filters">
+                    <input type="text" id="searchMemory" placeholder="🔍 Cari kenangan...">
+                    <select id="filterCategory">
+                        <option value="">Semua Kategori</option>
+                        <option value="date">Kencan</option>
+                        <option value="travel">Traveling</option>
+                        <option value="anniversary">Anniversary</option>
+                        <option value="daily">Keseharian</option>
+                        <option value="special">Momen Spesial</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                    <input type="month" id="filterMonth">
+                </div>
+                <div class="timeline" id="memoryTimeline"></div>
+            </div>
+
+            <!-- Gallery Tab -->
+            <div id="galleryTab" class="hidden">
+                <div class="gallery" id="photoGallery"></div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="hidden">
+                <div class="settings-section">
+                    <h3>Privasi & Keamanan</h3>
+                    <div class="form-group">
+                        <label style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Autentikasi 2 Faktor</span>
+                            <label class="switch">
+                                <input type="checkbox" id="setting2FA">
+                                <span class="slider"></span>
+                            </label>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Notifikasi Kenangan Baru</span>
+                            <label class="switch">
+                                <input type="checkbox" id="settingNotif" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Ubah Password</h3>
+                    <form id="changePasswordForm">
+                        <div class="form-group">
+                            <label>Password Lama</label>
+                            <input type="password" id="oldPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password Baru</label>
+                            <input type="password" id="newPassword" required minlength="8">
+                        </div>
+                        <div class="form-group">
+                            <label>Konfirmasi Password Baru</label>
+                            <input type="password" id="confirmNewPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Ubah Password</button>
+                    </form>
+                </div>
+                <div class="settings-section">
+                    <h3>Kelola Akun</h3>
+                    <button class="btn" onclick="disconnectPartner()" style="background: #e67e22;">Putuskan Koneksi Pasangan</button>
+                    <button class="btn" onclick="exportData()" style="background: #27ae60; margin-top: 10px;">Export Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeImageModal()">×</button>
+            <img id="modalImage" src="" alt="">
+            <div id="modalInfo"></div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeEditModal()">×</button>
+            <h2>Edit Kenangan</h2>
+            <form id="editMemoryForm">
+                <input type="hidden" id="editMemoryId">
+                <div class="form-group">
+                    <label>Judul</label>
+                    <input type="text" id="editTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select id="editCategory" required>
+                        <option value="date">Kencan</option>
+                        <option value="travel">Traveling</option>
+                        <option value="anniversary">Anniversary</option>
+                        <option value="daily">Keseharian</option>
+                        <option value="special">Momen Spesial</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" id="editDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Cerita</label>
+                    <textarea id="editStory" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let currentUser = null;
+        let memories = [];
+        let selectedFiles = [];
+        let currentTab = 'timeline';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFromStorage();
+            setupEventListeners();
+            
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showApp();
+            }
+        });
+
+        function setupEventListeners() {
+            // Auth forms
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+            document.getElementById('memoryForm').addEventListener('submit', handleAddMemory);
+            document.getElementById('editMemoryForm').addEventListener('submit', handleEditMemory);
+            document.getElementById('changePasswordForm').addEventListener('submit', handleChangePassword);
+
+            // Switch pages
+            document.getElementById('showRegister').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('registerPage').classList.remove('hidden');
+            });
+
+            document.getElementById('showLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('registerPage').classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
+            });
+
+            // File upload
+            document.getElementById('memoryImages').addEventListener('change', handleFileSelect);
+
+            // Filters
+            document.getElementById('searchMemory').addEventListener('input', filterMemories);
+            document.getElementById('filterCategory').addEventListener('change', filterMemories);
+            document.getElementById('filterMonth').addEventListener('change', filterMemories);
+        }
+
+        // Authentication
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const use2FA = document.getElementById('login2FA').checked;
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                if (use2FA) {
+                    const code = prompt('Masukkan kode 2FA (gunakan kode dummy: 123456):');
+                    if (code !== '123456') {
+                        showNotification('Kode 2FA salah!', 'error');
+                        return;
+                    }
+                }
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showNotification('Login berhasil! Selamat datang ' + user.name, 'success');
+                showApp();
+            } else {
+                showNotification('Email atau password salah!', 'error');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showNotification('Password tidak cocok!', 'error');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            if (users.find(u => u.email === email)) {
+                showNotification('Email sudah terdaftar!', 'error');
+                return;
+            }
+
+            const newUser = {
+                id: 'user_' + Date.now(),
+                name,
+                email,
+                password,
+                partnerCode: generatePartnerCode(),
+                partnerId: null,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            showNotification('Registrasi berhasil! Silakan login.', 'success');
+            document.getElementById('showLogin').click();
+        }
+
+        function generatePartnerCode() {
+            return Math.random().toString(36).substring(2, 10).toUpperCase();
+        }
+
+        function showApp() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('appContainer').classList.add('active');
+
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            document.getElementById('myPartnerCode').textContent = currentUser.partnerCode;
+
+            if (!currentUser.partnerId) {
+                document.getElementById('partnerSection').classList.remove('hidden');
+            } else {
+                document.getElementById('partnerSection').classList.add('hidden');
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const partner = users.find(u => u.id === currentUser.partnerId);
+                if (partner) {
+                    document.getElementById('partnerName').textContent = '💑 Dengan ' + partner.name;
+                }
+            }
+
+            loadMemories();
+            renderTimeline();
+            renderGallery();
+        }
+
+        function logout() {
+            if (confirm('Yakin ingin keluar?')) {
+                localStorage.removeItem('currentUser');
+                currentUser = null;
+                location.reload();
+            }
+        }
+
+        function connectPartner() {
+            const partnerCode = document.getElementById('partnerCodeInput').value.trim().toUpperCase();
+            
+            if (!partnerCode) {
+                showNotification('Masukkan kode pasangan!', 'error');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const partner = users.find(u => u.partnerCode === partnerCode && u.id !== currentUser.id);
+
+            if (!partner) {
+                showNotification('Kode pasangan tidak valid!', 'error');
+                return;
+            }
+
+            // Update both users
+            currentUser.partnerId = partner.id;
+            partner.partnerId = currentUser.id;
+
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            const partnerIndex = users.findIndex(u => u.id === partner.id);
+            
+            users[userIndex] = currentUser;
+            users[partnerIndex] = partner;
+
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            showNotification('Berhasil terhubung dengan ' + partner.name + '! 💕', 'success');
+            showApp();
+        }
+
+        function disconnectPartner() {
+            if (!confirm('Yakin ingin memutuskan koneksi dengan pasangan?')) return;
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const partnerIndex = users.findIndex(u => u.id === currentUser.partnerId);
+            
+            if (partnerIndex !== -1) {
+                users[partnerIndex].partnerId = null;
+            }
+
+            currentUser.partnerId = null;
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            users[userIndex] = currentUser;
+
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            showNotification('Koneksi pasangan telah diputus', 'info');
+            showApp();
+        }
+
+        // Memory Management
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            
+            if (selectedFiles.length + files.length > 10) {
+                showNotification('Maksimal 10 foto!', 'error');
+                return;
+            }
+
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    selectedFiles.push(file);
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('previewImages');
+                        const div = document.createElement('div');
+                        div.className = 'preview-item';
+                        div.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview">
+                            <button class="remove" onclick="removePreview(${selectedFiles.length - 1})">×</button>
+                        `;
+                        preview.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function removePreview(index) {
+            selectedFiles.splice(index, 1);
+            const previews = document.getElementById('previewImages');
+            previews.children[index].remove();
+        }
+
+        async function handleAddMemory(e) {
+            e.preventDefault();
+
+            if (!currentUser.partnerId) {
+                showNotification('Hubungkan dengan pasangan terlebih dahulu!', 'error');
+                return;
+            }
+
+            const title = document.getElementById('memoryTitle').value;
+            const category = document.getElementById('memoryCategory').value;
+            const date = document.getElementById('memoryDate').value;
+            const story = document.getElementById('memoryStory').value;
+
+            const images = [];
+            for (let file of selectedFiles) {
+                const base64 = await fileToBase64(file);
+                images.push(base64);
+            }
+
+            const memory = {
+                id: 'memory_' + Date.now(),
+                title,
+                category,
+                date,
+                story,
+                images,
+                createdBy: currentUser.id,
+                createdAt: new Date().toISOString(),
+                coupleId: [currentUser.id, currentUser.partnerId].sort().join('_')
+            };
+
+            memories.push(memory);
+            saveMemories();
+
+            showNotification('Kenangan berhasil ditambahkan! 💕', 'success');
+            
+            // Notify partner
+            if (document.getElementById('settingNotif').checked) {
+                showNotification('Pasangan Anda menambahkan kenangan baru!', 'info');
+            }
+
+            document.getElementById('memoryForm').reset();
+            selectedFiles = [];
+            document.getElementById('previewImages').innerHTML = '';
+            
+            showTab('timeline');
+            renderTimeline();
+            renderGallery();
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function loadMemories() {
+            if (!currentUser.partnerId) {
+                memories = [];
+                return;
+            }
+
+            const coupleId = [currentUser.id, currentUser.partnerId].sort().join('_');
+            const allMemories = JSON.parse(localStorage.getItem('memories') || '[]');
+            memories = allMemories.filter(m => m.coupleId === coupleId);
+        }
+
+        function saveMemories() {
+            const allMemories = JSON.parse(localStorage.getItem('memories') || '[]');
+            const otherMemories = allMemories.filter(m => m.coupleId !== memories[0]?.coupleId);
+            localStorage.setItem('memories', JSON.stringify([...otherMemories, ...memories]));
+        }
+
+        function loadFromStorage() {
+            // Initialize default date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('memoryDate').value = today;
+        }
+
+        // Display Functions
+        function renderTimeline() {
+            const timeline = document.getElementById('memoryTimeline');
+            
+            if (memories.length === 0) {
+                timeline.innerHTML = `
+                    <div class="empty-state">
+                        <div style="font-size: 60px;">💕</div>
+                        <h3>Belum ada kenangan</h3>
+                        <p>Mulai tambahkan kenangan indah bersama pasangan Anda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const sorted = [...memories].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            timeline.innerHTML = sorted.map(memory => {
+                const date = new Date(memory.date);
+                const formattedDate = date.toLocaleDateString('id-ID', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+
+                const categoryNames = {
+                    date: 'Kencan',
+                    travel: 'Traveling',
+                    anniversary: 'Anniversary',
+                    daily: 'Keseharian',
+                    special: 'Momen Spesial',
+                    other: 'Lainnya'
+                };
+
+                return `
+                    <div class="memory-card">
+                        <div class="memory-header">
+                            <div>
+                                <div class="memory-date">${formattedDate}</div>
+                                <span class="memory-category">${categoryNames[memory.category]}</span>
+                            </div>
+                        </div>
+                        <h3 class="memory-title">${memory.title}</h3>
+                        <p class="memory-content">${memory.story}</p>
+                        ${memory.images.length > 0 ? `
+                            <div class="memory-images">
+                                ${memory.images.map((img, idx) => `
+                                    <img src="${img}" alt="Memory" onclick="showImage('${memory.id}', ${idx})">
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        <div class="memory-actions">
+                            <button class="btn-small btn-edit" onclick="editMemory('${memory.id}')">✏️ Edit</button>
+                            <button class="btn-small btn-delete" onclick="deleteMemory('${memory.id}')">🗑️ Hapus</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderGallery() {
+            const gallery = document.getElementById('photoGallery');
+            
+            const allImages = [];
+            memories.forEach(memory => {
+                memory.images.forEach((img, idx) => {
+                    allImages.push({
+                        src: img,
+                        memoryId: memory.id,
+                        imageIndex: idx,
+                        title: memory.title,
+                        date: memory.date
+                    });
+                });
+            });
+
+            if (allImages.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-state">
+                        <div style="font-size: 60px;">📸</div>
+                        <h3>Belum ada foto</h3>
+                        <p>Upload foto kenangan bersama pasangan Anda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            gallery.innerHTML = allImages.map(img => `
+                <div class="gallery-item" onclick="showImage('${img.memoryId}', ${img.imageIndex})">
+                    <img src="${img.src}" alt="${img.title}">
+                    <div class="gallery-overlay">
+                        <h4>${img.title}</h4>
+                        <p>${new Date(img.date).toLocaleDateString('id-ID')}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterMemories() {
+            const search = document.getElementById('searchMemory').value.toLowerCase();
+            const category = document.getElementById('filterCategory').value;
+            const month = document.getElementById('filterMonth').value;
+
+            let filtered = [...memories];
+
+            if (search) {
+                filtered = filtered.filter(m => 
+                    m.title.toLowerCase().includes(search) || 
+                    m.story.toLowerCase().includes(search)
+                );
+            }
+
+            if (category) {
+                filtered = filtered.filter(m => m.category === category);
+            }
+
+            if (month) {
+                filtered = filtered.filter(m => m.date.startsWith(month));
+            }
+
+            const timeline = document.getElementById('memoryTimeline');
+            const sorted = filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (sorted.length === 0) {
+                timeline.innerHTML = `
+                    <div class="empty-state">
+                        <div style="font-size: 60px;">🔍</div>
+                        <h3>Tidak ada hasil</h3>
+                        <p>Coba kata kunci atau filter lain</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Use same render logic
+            memories = filtered;
+            renderTimeline();
+            memories = JSON.parse(localStorage.getItem('memories') || '[]').filter(m => 
+                m.coupleId === [currentUser.id, currentUser.partnerId].sort().join('_')
+            );
+        }
+
+        // Edit & Delete
+        function editMemory(id) {
+            const memory = memories.find(m => m.id === id);
+            if (!memory) return;
+
+            document.getElementById('editMemoryId').value = memory.id;
+            document.getElementById('editTitle').value = memory.title;
+            document.getElementById('editCategory').value = memory.category;
+            document.getElementById('editDate').value = memory.date;
+            document.getElementById('editStory').value = memory.story;
+
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function handleEditMemory(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('editMemoryId').value;
+            const memory = memories.find(m => m.id === id);
+            
+            if (!memory) return;
+
+            memory.title = document.getElementById('editTitle').value;
+            memory.category = document.getElementById('editCategory').value;
+            memory.date = document.getElementById('editDate').value;
+            memory.story = document.getElementById('editStory').value;
+
+            saveMemories();
+            renderTimeline();
+            renderGallery();
+            closeEditModal();
+
+            showNotification('Kenangan berhasil diupdate!', 'success');
+        }
+
+        function deleteMemory(id) {
+            if (!confirm('Yakin ingin menghapus kenangan ini?')) return;
+
+            memories = memories.filter(m => m.id !== id);
+            saveMemories();
+            renderTimeline();
+            renderGallery();
+
+            showNotification('Kenangan berhasil dihapus', 'info');
+        }
+
+        // Modals
+        function showImage(memoryId, imageIndex) {
+            const memory = memories.find(m => m.id === memoryId);
+            if (!memory) return;
+
+            document.getElementById('modalImage').src = memory.images[imageIndex];
+            document.getElementById('modalInfo').innerHTML = `
+                <h3>${memory.title}</h3>
+                <p>${memory.story}</p>
+                <p style="color: #666; margin-top: 10px;">
+                    ${new Date(memory.date).toLocaleDateString('id-ID', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    })}
+                </p>
+            `;
+            document.getElementById('imageModal').classList.add('active');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        // Tabs
+        function showTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Hide all tabs
+            document.getElementById('timelineTab').classList.add('hidden');
+            document.getElementById('addTab').classList.add('hidden');
+            document.getElementById('galleryTab').classList.add('hidden');
+            document.getElementById('settingsTab').classList.add('hidden');
+
+            // Show selected tab
+            if (tab === 'timeline') {
+                document.getElementById('timelineTab').classList.remove('hidden');
+                renderTimeline();
+            } else if (tab === 'add') {
+                document.getElementById('addTab').classList.remove('hidden');
+            } else if (tab === 'gallery') {
+                document.getElementById('galleryTab').classList.remove('hidden');
+                renderGallery();
+            } else if (tab === 'settings') {
+                document.getElementById('settingsTab').classList.remove('hidden');
+            }
+        }
+
+        // Settings
+        function handleChangePassword(e) {
+            e.preventDefault();
+
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+
+            if (oldPassword !== currentUser.password) {
+                showNotification('Password lama salah!', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showNotification('Password baru tidak cocok!', 'error');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            
+            users[userIndex].password = newPassword;
+            currentUser.password = newPassword;
+
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            document.getElementById('changePasswordForm').reset();
+            showNotification('Password berhasil diubah!', 'success');
+        }
+
+        function exportData() {
+            const data = {
+                user: currentUser,
+                memories: memories,
+                exportDate: new Date().toISOString()
+            };
+
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `couple-diary-${Date.now()}.json`;
+            a.click();
+
+            showNotification('Data berhasil di-export!', 'success');
+        }
+
+        // Notifications
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <strong>${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'}</strong>
+                <p>${message}</p>
+            `;
+            
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Close modals on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        };
+    </script>
+</body>
+</html>
